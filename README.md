@@ -106,11 +106,12 @@ Go has several error handling functions that may be of use to you:
 
 ### Getting started
 
-Do all building and testing on the Vagrant VM. You may either write your code on
+You can work directly on your laptop if you installed Go and Git on your computer.  Alternatively,
+you may do building and testing on the Vagrant VM. You may either write your code on
 the Vagrant VM (both Emacs and Vim text editors are pre-installed) or directly on
 your OS (allowing you to use any editor you have installed).
 
-Many modern editors (Atom, VS Code, Sublime, ...) provide convenient extensions
+Many modern editors (Emacs, Atom, VS Code, Sublime, ...) provide convenient extensions
 specifically designed for working with Golang. These extensions provide many
 useful features, including:
 * Automatically adding required import statements
