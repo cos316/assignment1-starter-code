@@ -181,9 +181,9 @@ then `ctrl-c`. Conversely, you can send a foreground process to the background b
 hitting `ctrl-z` to suspend the process, and typing the command `bg` to resume the
 process in the background.
 
-The Bash script `test_client_server.sh` will test your implementation by attempting
+You should test your implementation by attempting
 to send several different messages between your client and server.
-The messages are the following:
+For example:
 
 0.  The short message "Go Tigers!\n"
 0.  A long, randomly generated alphanumeric message
@@ -192,16 +192,6 @@ The messages are the following:
 0.  Several long, random alphaumeric messages sent concurrently from separate
     clients to one server
 
-Run the script as
-
-`./test_client_server.sh [server port]`
-
-If you get a permissions error, run `chmod 744 test_client_server.sh` to give the
-script execute privileges.
-
-The test script will print "SUCCESS" if the message is sent and received correctly.
-Otherwise it will print a diff of the sent and received message
-if the diff output is human-readable, i.e., just for tests 1 and 4.
 
 ### Debugging hints
 
