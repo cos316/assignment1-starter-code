@@ -127,11 +127,8 @@ The basic command to do this is `git clone https://github.com/cos316/<repository
 You may also clone your repository using the GitHub Desktop client.
 For more detailed instructions on cloning a repository, consult [this readme](https://github.com/cos316/COS316-Public/blob/master/assignments/GITHUB.md).
 
-This guide also contains instructions for mounting the cloned repository as a
-shared folder within your VM, which you will need to do before continuing.
+You can work with your code repository either using the VM or using your physical machine directly.
 
-Once your repository has been cloned and synced to your VM, run `vagrant ssh`
-from your terminal, and run `cd /vagrant/assignments` to get to the course directory.
 We have provided scaffolding code in the `assignment1` directory.
 *You should read and understand this code before starting to program.*
 
