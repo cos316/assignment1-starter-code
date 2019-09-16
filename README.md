@@ -143,6 +143,7 @@ The following section provides details for implementing the client and server pr
 ### Go
 
 The documentation for Go socket programming is located [here](https://golang.org/pkg/net/).  
+
 The overview at the top and the section on the [Conn type](https://golang.org/pkg/net/#Conn) will be most relevant.
 You may also find the buffered [Reader](https://golang.org/pkg/bufio/#Reader)
 and [Writer](https://golang.org/pkg/bufio/#Writer) types to be useful, but you
