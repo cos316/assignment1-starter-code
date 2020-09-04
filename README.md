@@ -1,6 +1,6 @@
 # COS316, Assignment 1: Socket Programming
 
-## Due: September 24 at 23:00
+## Due: September 16 at 23:00
 
 ## Socket Programming
 
