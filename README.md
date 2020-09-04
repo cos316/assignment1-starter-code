@@ -1,10 +1,12 @@
 # COS316, Assignment 1: Socket Programming
 
-## Due: September 16 at 23:00
+## Due: 9/16 at 23:00
 
 ## Socket Programming
 
-Socket programming is the standard way to write programs
+**The entirety of this assignment must be done individually.**
+
+As discussed in lecture, socket programming is the standard way to write programs
 that communicate over a network. While originally developed for Unix computers
 programmed in C, the socket abstraction is general and not tied to any specific
 operating system or programming language. This allows programmers to use the socket
@@ -106,12 +108,11 @@ Go has several error handling functions that may be of use to you:
 
 ### Getting started
 
-You can work directly on your laptop if you installed Go and Git on your computer.  Alternatively,
-you may do building and testing on the Vagrant VM. You may either write your code on
+Do all building and testing on the Vagrant VM. You may either write your code on
 the Vagrant VM (both Emacs and Vim text editors are pre-installed) or directly on
 your OS (allowing you to use any editor you have installed).
 
-Many modern editors (Emacs, Atom, VS Code, Sublime, ...) provide convenient extensions
+Many modern editors (Atom, VS Code, Sublime, ...) provide convenient extensions
 specifically designed for working with Golang. These extensions provide many
 useful features, including:
 * Automatically adding required import statements
@@ -127,8 +128,11 @@ The basic command to do this is `git clone https://github.com/cos316/<repository
 You may also clone your repository using the GitHub Desktop client.
 For more detailed instructions on cloning a repository, consult [this readme](https://github.com/cos316/COS316-Public/blob/master/assignments/GITHUB.md).
 
-You can work with your code repository either using the VM or using your physical machine directly.
+This guide also contains instructions for mounting the cloned repository as a
+shared folder within your VM, which you will need to do before continuing.
 
+Once your repository has been cloned and synced to your VM, run `vagrant ssh`
+from your terminal, and run `cd /vagrant/assignments` to get to the course directory.
 We have provided scaffolding code in the `assignment1` directory.
 *You should read and understand this code before starting to program.*
 
@@ -143,7 +147,6 @@ The following section provides details for implementing the client and server pr
 ### Go
 
 The documentation for Go socket programming is located [here](https://golang.org/pkg/net/).  
-
 The overview at the top and the section on the [Conn type](https://golang.org/pkg/net/#Conn) will be most relevant.
 You may also find the buffered [Reader](https://golang.org/pkg/bufio/#Reader)
 and [Writer](https://golang.org/pkg/bufio/#Writer) types to be useful, but you
@@ -162,8 +165,12 @@ solutions have roughly 40  (well commented and spaced) lines of code in the
 You should build your solution by running `make` in the `assignment1` directory.
 Your code *must* build using the provided Makefile.
 The server should be run as `./server [port] > [output file]`.
-The client should be run as `./client [server IP] [server port] < [message file]`.
-See "Testing" for more details.
+The client can be run in two ways and should handle both:
+First, with `./client [server IP] [server port]`, your client should wait for
+input. You can then type lines of input text into the command line. `ctrl-c`
+should exit the client. Alternatively, with
+`./client [server IP] [server port] < [message file]`, the client receives input
+text from the `[message file]`. See "Testing" for more details.
 
 ### Testing
 
@@ -179,9 +186,9 @@ then `ctrl-c`. Conversely, you can send a foreground process to the background b
 hitting `ctrl-z` to suspend the process, and typing the command `bg` to resume the
 process in the background.
 
-You should test your implementation by attempting
+The Bash script `test_client_server.sh` will test your implementation by attempting
 to send several different messages between your client and server.
-For example:
+The messages are the following:
 
 0.  The short message "Go Tigers!\n"
 0.  A long, randomly generated alphanumeric message
@@ -190,11 +197,21 @@ For example:
 0.  Several long, random alphaumeric messages sent concurrently from separate
     clients to one server
 
+Run the script as
+
+`./test_client_server.sh [server port]`
+
+If you get a permissions error, run `chmod 744 test_client_server.sh` to give the
+script execute privileges.
+
+The test script will print "SUCCESS" if the message is sent and received correctly.
+Otherwise it will print a diff of the sent and received message
+if the diff output is human-readable, i.e., just for tests 1 and 4.
 
 ### Debugging hints
 
 Here are some debugging tips. If you are still having trouble, ask a question on
-Piazza or see an instructor during office hours.
+Ed or see an instructor during office hours.
 
 * There are defined buffer size constants in the scaffolding code. Use them.
   If you are not using one of them, either you have hard-coded a value, which is
