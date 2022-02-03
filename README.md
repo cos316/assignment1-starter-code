@@ -1,82 +1,65 @@
 # COS316, Assignment 1: Socket Programming
 
+## Due: [Date TBD] at [Time TBD]
+
 ## Socket Programming
 
-**The entirety of this assignment must be done individually.**
-
-As discussed in lecture, socket programming is the standard way to write
-programs that communicate over a network. While originally developed for Unix
-computers programmed in C, the socket abstraction is general and not tied to
-any specific operating system or programming language. As a result, programmers
-use sockets to write networked programs in many contexts.
+Socket programming is the standard way to write programs
+that communicate over a network. While originally developed for Unix computers
+programmed in C, the socket abstraction is general and not tied to any specific
+operating system or programming language. This allows programmers to use the socket
+mental model to write correct network programs in many contexts.
 
 This part of the assignment will give you experience with basic socket programming.
-You will write two programs for transmitting text messages over the Internet: a
-client for sending and a server for receiving.
-
+You will write two programs for transmitting text messages over the Internet: 1) a
+client for sending, and 2) a server for receiving.
 Both the client and server must be written in Go.
 
-The client and server programs should meet the following specifications. Be
-sure to read these meticulously and ensure your implementation fulfills them:
+The client and server programs should meet the following specifications.
+Be sure to read these meticulously before and after programming to make sure your
+implementation fulfills them:
 
 ### Server specification
-
 * The server program should listen on a socket, wait for a client to connect,
   receive a message from the client, print the message to stdout, and then wait
   for the next client indefinitely.
-
-* The server should take one command-line argument: the TCP port number to
-  listen on for client connections.  
-      
-    ```
-    $ ./server [PORT]
-    ```
-
-* The server should accept and process client communications indefinitely,
+* The server should take one command-line argument: the port number to listen on
+  for client connections.
+* The server should accept and process client communications in an infinite loop,
   allowing multiple clients to send messages to the same server. The server should
   only exit in response to an external signal (e.g. SIGINT from pressing `ctrl-c`).
-
 * The server should gracefully handle error values potentially returned by socket
   programming library functions (see specifics below). Errors related to handling
   client connections should not cause the server to exit after handling the error;
   all others should.
-
-* The server should maintain a client queue and handle multiple client
-  connection attempts sequentially. The good news is, this is the default
-  behavior if you are using `net.Listen()`. Often, networked servers will
-  handle multiple clients connections concurrently but that is **not
-  necessary** for this assignment.
+* The server should maintain a client queue and handle multiple client connection
+  attempts sequentially. The good news is, this is the default behavior if you are
+  using `net.Listen()`. **You do not need to do anything extra to satisfy this
+  requirement.** In real applications, a TCP server would fork a new process to handle
+  each client connection concurrently, but that is **not necessary** for this
+  assignment.
 
 ### Client specification
 
 * The client program should contact a server, read a message from stdin, send the
   message, and exit.
-
-* The client should read and send messages *exactly* as they appear from stdin
+* The client should read and send the message *exactly* as it appears in stdin
   until reaching an EOF (end-of-file).
-
 * The client should take two command-line arguments: the IP address of the server
   and the port number of the server.
-
-    ```
-    $ ./client [ADDRESS] [PORT]
-    ```
-
 * The client must be able to handle arbitrarily large messages by iteratively
   reading and sending chunks of the message, rather than reading the whole message
   into memory first.
-
 * The client should handle partial sends (when a socket only transmits part of
   the data given in the last send operation) by attempting to re-send the rest of
   the data until it has all been sent.
-
 * The client should gracefully handle error values potentially returned by socket
   programming library functions.
 
 ### Error Handling
 
 Generally speaking, there are several reasonable actions that a program might take
-upon realizing that it has encountered an error, and you may (or may not) sometimes
+upon realizing that it has encountered an error, and you may sometimes
 need to take one or more of these actions.
 
 * **Attempt to recover:**
@@ -116,43 +99,37 @@ Go has several error handling functions that may be of use to you:
   It differs from `log.Fatal()` in that deferred functions are executed before the
   program exits (perhaps freeing resources or flushing buffers).
   An interesting note is that callers can recover from a panic using `recover()`
-  (analagous to `catch` in Java), but you will *not* need to make use of this
+  (analagous to `catch` in Java), but you will *not* need to make use of the `recover()`
   functionality for this assignment.
   See [this blog post](https://blog.golang.org/defer-panic-and-recover)
   for more on `defer()`, `panic()`, and `recover()`.
 
 ### Getting started
 
-Do all building and testing on the Vagrant VM. You may either write your code on
-the Vagrant VM (both Emacs and Vim text editors are pre-installed) or directly on
-your OS (allowing you to use any editor you have installed).
+Assuming you have completed assignment 0 and have your local environment set up, 
+you can work on this assignment directly on your physical machine and use any editor 
+you have installed (e.g. Vim). 
 
-Many editors (Emacs, Vim, Atom, VS Code, Sublime, ...) provide convenient extensions
-specifically designed for working with Go. These extensions provide many
+Many modern editors (Emacs, Atom, VS Code, Sublime, ...) provide convenient extensions
+specifically designed for working with Golang. These extensions provide many
 useful features, including:
 * Automatically adding required import statements
 * Automatically vetting your code for compilation errors
 * Automatically formatting your code in idiomatic Go style
 * Automatically running any unit tests you've written
 
-We recommend that you install an extension appropriate for your editor of choice
-to streamline your Go programming experience.
+It is strongly recommended that you install an extension appropriate for your
+editor of choice to streamline your Go programming experience.
 
 Before jumping into writing code, you will need to clone your code repository
 from GitHub to your local machine.
 The basic command to do this is `git clone https://github.com/cos316/<repository name>`.
-You may also clone your repository using the GitHub Desktop client.
-For more detailed instructions on cloning a repository, consult [this readme](https://github.com/cos316/COS316-Public/blob/master/assignments/GITHUB.md).
+You may also clone your repository using the [GitHub Desktop client](https://desktop.github.com/).
 
-This guide also contains instructions for mounting the cloned repository as a
-shared folder within your VM, which you will need to do before continuing.
-
-Once your repository has been cloned and synced to your VM, run `vagrant ssh`
-from your terminal, and run `cd /vagrant/assignments` to get to the course directory.
 We have provided scaffolding code in the `assignment1` directory.
 *You should read and understand this code before starting to program.*
 
-You should program only in the locations of the provided files marked with `TODO`
+You should only add code to locations in the provided files marked with `TODO`
 comments. There is one `TODO` section for the client and one for the server.
 
 You can add functions if you wish, but do not change file names, as they will be
@@ -163,6 +140,7 @@ The following section provides details for implementing the client and server pr
 ### Go
 
 The documentation for Go socket programming is located [here](https://golang.org/pkg/net/).  
+
 The overview at the top and the section on the [Conn type](https://golang.org/pkg/net/#Conn) will be most relevant.
 You may also find the buffered [Reader](https://golang.org/pkg/bufio/#Reader)
 and [Writer](https://golang.org/pkg/bufio/#Writer) types to be useful, but you
@@ -181,8 +159,12 @@ solutions have roughly 40  (well commented and spaced) lines of code in the
 You should build your solution by running `make` in the `assignment1` directory.
 Your code *must* build using the provided Makefile.
 The server should be run as `./server [port] > [output file]`.
-The client should be run as `./client [server IP] [server port] < [message file]`.
-See "Testing" for more details.
+The client can be run in two ways and should handle both:
+Firstly, with `./client [server IP] [server port]`, your client should wait for
+input. You can then type lines of input text into the command line. `ctrl-c`
+should exit the client. Alternatively, with
+`./client [server IP] [server port] < [message file]`, the client receives input
+text from the `[message file]`. See "Testing" for more details.
 
 ### Testing
 
@@ -193,37 +175,26 @@ SSH window.
 You should use `127.0.0.1` (i.e. the "localhost", or "loopback", address) as the
 server IP and a high server port number between 10000 and 60000.
 
-You can kill a background server with the command `fg` to bring it to the foreground
-then `ctrl-c`. Conversely, you can send a foreground process to the background by
-hitting `ctrl-z` to suspend the process, and typing the command `bg` to resume the
+You can kill a background process with two successive commands: `fg` to bring it to the foreground,
+and then `ctrl-c` to kill it. Conversely, you can send a foreground process to the background by
+hitting `ctrl-z` to suspend the process, and then typing the command `bg` to resume the
 process in the background.
 
-The Bash script `test_client_server.sh` will test your implementation by attempting
+You should test your implementation by attempting
 to send several different messages between your client and server.
-The messages are the following:
+For example:
 
 0.  The short message "Go Tigers!\n"
-0.  A long, randomly generated alphanumeric message
+0.  A **very** long, randomly generated alphanumeric message
 0.  A long, randomly generated binary message
 0.  Several short messages sent sequentially from separate clients to one server
 0.  Several long, random alphaumeric messages sent concurrently from separate
     clients to one server
 
-Run the script as
-
-`./test_client_server.sh [server port]`
-
-If you get a permissions error, run `chmod 744 test_client_server.sh` to give the
-script execute privileges.
-
-The test script will print "SUCCESS" if the message is sent and received correctly.
-Otherwise it will print a diff of the sent and received message
-if the diff output is human-readable, i.e., just for tests 1 and 4.
-
 ### Debugging hints
 
 Here are some debugging tips. If you are still having trouble, ask a question on
-Piazza or see an instructor during office hours.
+Ed or see an instructor during office hours.
 
 * There are defined buffer size constants in the scaffolding code. Use them.
   If you are not using one of them, either you have hard-coded a value, which is
@@ -237,8 +208,7 @@ Piazza or see an instructor during office hours.
 * When testing, make sure you are using `127.0.0.1` as the server IP argument to
   the client and the same server port for both client and server programs.
 * If you get "address already in use" errors, make sure you don't already have a
-  server running. Otherwise, restart your ssh session with the command `logout`
-  followed by `vagrant ssh`.
+  server running.
 * If you are getting other connection errors, try a different port between
   10000 and 60000.
 
@@ -248,11 +218,11 @@ Piazza or see an instructor during office hours.
   the user presses `ctrl-c`?**
 
   No, it is not necessary in this assignment. The default response to signals is good enough.
-  Keep in mind it would be good practice to do so in general, however.
+  However, keep in mind it would be good practice to do so in general.
 
 * **Should I use stream (TCP) or datagram (UDP) sockets?**
 
-  Please use stream (TCP) sockets, to ensure that the exact message is delivered.
+  Please use stream (TCP) sockets to ensure that the exact message is delivered.
   Streams ensure reliable, in-order packet transmission, whereas datagram packets
   are not guaranteed to be delivered.
 
@@ -262,7 +232,7 @@ Piazza or see an instructor during office hours.
 
 * **Should the client wait to receive a reply from the server?**
 
-  No, in this assignment it should exit immediately after sending all the data.
+  No, in this assignment it should exit immediately after sending all of the data.
 
 * **Should the server handle client connections concurrently (in separate processes)?**
 
@@ -274,14 +244,11 @@ Piazza or see an instructor during office hours.
 To submit your client and server, `git commit` the changes to your code and
 `git push` them to your GitHub classroom repository.
 
-See the [GitHub classroom README](https://github.com/cos316/COS316-Public/blob/master/assignments/GITHUB.md)
-for more detailed instructions.
-
 We will grade your submissions by compiling your client and server, and then
 sending messages back and forth between each of your submitted programs and a
 reference server or client, as appropriate. Your code will be scored based on
 how many different kinds of messages are transmitted correctly, and how well
-your implementations adhere to various aspects of the specification. Within a
+your implementation adheres to various aspects of the specification. Within a
 couple minutes of submitting your assignment, the GitHub autograder will add a
 comment to your most recent commit on GitHub, indicating your test results.
 
